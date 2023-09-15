@@ -1,10 +1,10 @@
 from django.db import models
-from django.db.models import Model
-class holiday(models.Model):
-   holiday_name=models.CharField(default="unnamed holiday",max_length=15)
-   date=models.DateField()
-   def __str__(self):
-      return (self.holiday_name)
+# from django.db.models import Model
+# class holiday(models.Model):
+#   holiday_name=models.CharField(default="unnamed holiday",max_length=15)
+#   date=models.DateField()
+#   def __str__(self):
+#       return (self.holiday_name)
 
 
 
@@ -35,7 +35,7 @@ class holiday(models.Model):
 
 #day=models.CharField(choices=days_options,default='Monday',max_length=10)
 
-   
+
 # class Subject(models.Model):
 #    subject_name=models.CharField(max_length=40)
 #    subject_branch=models.ManyToManyField(branch)
@@ -45,7 +45,7 @@ class holiday(models.Model):
 #    number_of_peroids_on_wednesday=models.PositiveIntegerField(default=0)
 #    number_of_peroids_on_thursday=models.PositiveIntegerField(default=0)
 #    number_of_peroids_on_friday=models.PositiveIntegerField(default=0)
-   
+
 #    def __str__(self):
 #       return (self.subject_name)
 # class S1_Subject(Subject):
@@ -71,7 +71,7 @@ class holiday(models.Model):
 # class Class(models.Model):
 #    branch=models.CharField(choices=branches,default='cs',max_length=45)
 #    sem_no=models.IntegerField(default=0)
-   
+
 
 
 # Create your models here.
@@ -81,4 +81,3 @@ class holiday(models.Model):
   #  day=models.CharField(choices=days_options,default='monday',max_length=10)
   #  number_of_peroids=models.IntegerField(default=0)
 
- 

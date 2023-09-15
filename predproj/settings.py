@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w)4-c1-$)1@dw%%z!kvbtdhtqcxlf4q)_v9yfvmawlg9dk+=j1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['jeevjacobgeorge.pythonanywhere.com']
 
 
 # Application definition
@@ -117,7 +117,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT ='/home/jeevjacobgeorge/django_attendance_predictor/static'
 
 
 # Default primary key field type

@@ -1,28 +1,29 @@
-from unicodedata import name
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django import forms
 from django.utils.safestring import mark_safe
-from algorithm.models import *
-from django.core.exceptions import ValidationError
+
 
 year_list=[
-   #('2023-','First year'),
-   ('2022-12-21','Second year'), 
-   ('2023-01-07','Third year'),
-   ('2022-12-23','Fourth year'),
+   #('2023-02-08','First year'),
+   ('2023-12-21','Second year'),
+   ('2023-12-07','Third year'),
+   ('2023-12-07','Fourth year'),
 ]
 class Newform(forms.Form):
    #branch=forms.CharField(label=mark_safe('<b>Branch'),widget=forms.Select(choices=branches))
    yr=forms.CharField(label=mark_safe("<b>Year of Study:"),widget=forms.Select(choices=year_list))
-   #subject=forms.CharField(label=mark_safe("<b><br><br>Subject"))
-   mon=forms.IntegerField(label=mark_safe("<br><br>As per timetable no of periods of a subject:<br>Monday:"),min_value=0,max_value=6,initial=0)
-   tue=forms.IntegerField(label=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuesday:"),min_value=0,max_value=6,initial=0)
-   wed=forms.IntegerField(label=mark_safe("<br><br>Wednesday:"),min_value=0,max_value=6,initial=0)
-   th=forms.IntegerField(label=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thursday:"),min_value=0,max_value=6,initial=0)
-   fri=forms.IntegerField(label=mark_safe("<br><br>Friday:"),min_value=0,max_value=6,initial=0)
-   att_no=forms.IntegerField(label=mark_safe("<b><br><br><u>Current attendance</u><br>No of classes attended till now"),min_value=0,max_value=200)
-   tt_no=forms.IntegerField(label=mark_safe("<br><b>Total no of classes till now &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "),min_value=1,max_value=200)
+   att_no=forms.IntegerField(label=mark_safe("<b><br><br><h4><u>Current attendance</u>(Etlab)</h4>No of classes attended till now"),min_value=0,max_value=200)
+   tt_no=forms.IntegerField(label=mark_safe("<br><br><b>Total no of classes till now&nbsp;"),min_value=1,max_value=200)
+   mon=forms.IntegerField(label=mark_safe("<br><br><u>Check Timetable</u><br>No of periods of the subject each day:<br>Monday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),min_value=0,max_value=5,initial=0)
+   tue=forms.IntegerField(label=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuesday&nbsp;"),min_value=0,max_value=5,initial=0)
+   wed=forms.IntegerField(label=mark_safe("<br><br>Wednesday:"),min_value=0,max_value=5,initial=0)
+   th=forms.IntegerField(label=mark_safe("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thursday:"),min_value=0,max_value=5,initial=0)
+   fri=forms.IntegerField(label=mark_safe("<br><br>Friday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"),min_value=0,max_value=5,initial=0)
+
+   #att_no=forms.IntegerField(label=mark_safe("<b><br><br><br><h3><u>Current attendance</u>(Etlab)</h4><br>No of classes attended till now"),min_value=0,max_value=200)
+   #tt_no=forms.IntegerField(label=mark_safe("<br><br><b>Total no of classes till now&nbsp;"),min_value=1,max_value=200)
 
 
 def att_pred(request):
@@ -41,13 +42,11 @@ def att_pred(request):
          fri=form.cleaned_data["fri"]
          yr=form.cleaned_data["yr"]
          if a>t:
-            return HttpResponse('Oops....No of attended classes cannot be greater than total no classes.')
+            return HttpResponse('Oops....No of attended classes cannot be greater than total no classes.Reload site:)')
 
 
 
          from datetime import date
-         import datetime
-         import calendar
          from dateutil.rrule import rrule, DAILY
          import numpy as np
 
@@ -55,7 +54,35 @@ def att_pred(request):
 
          def weekday_count(start, end):
 
-            leaves=["2022-10-24","2022-12-25"]
+            leaves = [
+    "2023-08-26",
+    "2023-08-27",
+    "2023-08-28",
+    "2023-08-29",
+    "2023-08-30",
+    "2023-08-31",
+    "2023-09-01",
+    "2023-09-02",
+    "2023-09-03",
+    "2023-09-06",
+    "2023-09-22",
+    "2023-09-27",
+    "2023-10-02",
+    "2023-10-23",
+    "2023-10-24",
+    "2023-12-23",
+    "2023-12-24",
+    "2023-12-25",
+    "2023-12-26",
+    "2023-12-27",
+    "2023-12-28",
+    "2023-12-29",
+    "2023-12-30",
+    "2023-12-31",
+    "2024-01-01",
+    "2024-01-02"
+]
+
             l1 = [0, 0, 0, 0, 0]
             for dt in rrule(DAILY, dtstart=start, until=end):
                if bool(np.is_busday([dt.strftime("%Y-%m-%d")],
@@ -71,7 +98,7 @@ def att_pred(request):
 
          #get from html form period distribution,no of attended classes(a),total no of classes(t)
          periods=[mon,tue,wed,th,fri]
-         at=a
+
          tt=t
          for i in range(5):
            a += periods[i]*w_days[i]
@@ -92,7 +119,7 @@ def att_pred(request):
          return render(request,'algorithm/base.html',{"form":form}) # 2 nd form is from line 26
                                                                      # it is a new form
 
-   return render(request,'algorithm/base.html',{"form":Newform()}) 
+   return render(request,'algorithm/base.html',{"form":Newform()})
 
 
 
@@ -110,27 +137,3 @@ def att_pred(request):
 
 
 
-# branches=[
-#    ('Computer Science','Computer Science'),
-#    ('Computer Science:AI and Machine Learning','Computer Science:AI and Machine Learning'),
-#    ('Electronics and Communication A','Electronics and Communication A'),
-#    ('Electronics and Communication B','Electronics and Communication B'),
-#    ('Biotechnology',"Biotechnology"),
-#    ('Mechanical Engineering A','Mechanical Engineering A'),
-#    ('Mechanical Engineering B','Mechanical Engineering B'),
-
-#    ]
-# sems_drop=[
-# ("Semester 1 ","Semester 1"),
-# ("Semester 2","Semester 2"),
-# ("Semester 3","Semester 3"),
-# ("Semester 4","Semester 4"),
-# ("Semester 5","Semester 5"),
-# ("Semester 6","Semester 6"),
-# ("Semester 7","Semester 7"),
-# ("Semester 8","Semester 8"),
-# ("Minors","Minors"),
-# ("Honours","Honours")
-
-
-#    ]
