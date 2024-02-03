@@ -8,6 +8,6 @@ import algorithm
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('algorithm.al_urls')),
-    path('attendance',include('algorithm.al_urls')),
+    path('attendance/',include('algorithm.al_urls')),
 ]
 
